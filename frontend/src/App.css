@@ -1,0 +1,509 @@
+/* 메인 뒷배경 */
+.mainbackground {
+  width: 100vw;
+  height: 100vh;
+  background: #D0E3FF;
+  text-align: center;
+
+}
+
+/* 항공기 이미지 */
+.airplane-image {
+  position: absolute;
+  top: 2%;
+  width: 20vw; /* 뷰포트의 너비에 비례하도록 변경 */
+  max-width: 250px; /* 최대 크기 설정 */
+  transform: translateX(-30%); /* 센터 정렬을 위해 조정 */
+  height: auto;
+}
+.title {
+  font-size: 1rem; /* 기본 글꼴 크기 */
+  font-weight: bold;
+  margin-left: 10px;
+  align-self: flex-end; /* 제목을 입력 필드 하단에 정렬 */
+}
+
+/* 헤더 라벨 */
+.header-label {
+  font-size: 5vw; /* 화면 너비에 따라 조정 */
+  font-size: clamp(1.5rem, 5vw, 80px); /* 최소, 유동적, 최대 크기를 지정합니다. */
+  font-weight: bold;
+  color: #334EAC;
+  text-align: center;
+  width: 100%;
+  margin: 1.5em 0;
+}
+
+/* 메인 페이지 래퍼 */
+.mainpage-wrapper {
+  max-width: 1200px;
+  width: 90%; /* 화면 너비에 비례하도록 변경 */
+  min-height: 630px;
+  margin: 0 auto; /* 가운데 정렬 */
+  border-radius: 10px;
+  position: relative;
+  background: #EDF1F6;
+}
+.mainarticle {
+  max-width: 1175px; /* 고정된 너비를 최대 너비로 변경 */
+  width: 98%; /* 상대적인 너비 설정 */
+  margin: auto; /* 가운데 정렬 */
+  padding: 5px; 
+  border-radius: 10px;
+  border: 3px #334EAC solid;
+  position: relative;
+  background: #EDF1F6;
+  overflow: hidden; /* 내용이 넘칠 경우 숨김 처리 */
+}
+.header {
+  display: flex;
+  border-radius: 10px;
+  justify-content: center; /* 버튼들을 중앙 정렬합니다 */
+  padding: 5px;
+  background: #EDF1F6;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.headerbutton {
+  flex-grow: 1; /* 모든 버튼이 동일한 공간을 차지하도록 합니다 */
+  padding: 1vw; /* 패딩을 상대적인 단위로 변경 */
+  background: #EDF1F6;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.5vw; /* 글꼴 크기를 상대적인 단위로 변경 */
+  font-family: 'Roboto', sans-serif;
+  font-weight: 800;
+  border: 3px #334EAC solid;
+  color: #334EAC;
+  text-align: center; /* 텍스트를 버튼 중앙에 위치시킵니다 */
+  margin: 0 0.5vw; /* 마진을 상대적인 단위로 변경 */
+}
+
+.headerbutton:hover {
+  background-color: #BAD6EB;
+}
+
+.activeButton {
+  background-color: #BAD6EB; /* 활성화된 버튼의 배경색 */
+}
+.write-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: flex-start;
+  margin-bottom: 20px; /* 각 입력 그룹 사이의 마진을 설정합니다. */
+}
+
+.inputs-row1 {
+  width: 93%;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 35px;
+}
+
+.inputs-row2 {
+  width: 93%;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+
+}
+
+.inputs-row1 input {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border-radius: 20px;
+  border: 5px solid #7096D1;
+  font-size: 20px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 800;
+  margin: 0 10px;
+  outline: none;
+  -webkit-appearance: none; 
+  appearance: none;
+}
+.inputs-row2 input {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border-radius: 20px;
+  border: 5px solid #7096D1;
+  font-size: 20px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 800;
+  margin: 0 10px;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none; 
+}
+
+.input-label {
+  font-size: 20px; /* 라벨 크기를 입력 필드에 맞게 조정합니다. */
+  font-weight: bold;
+  margin-bottom: 10px; /* 라벨과 입력 필드 사이의 마진을 설정합니다. */
+}
+
+.input-field {
+  width: calc(100% - 20px); /* 좌우 패딩을 고려한 너비 설정 */
+  padding: 10px;
+  border-radius: 20px;
+  border: 5px solid #7096D1;
+  margin-bottom: 10px; /* 다음 요소와의 거리 */
+  font-size: 20px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 800;
+  outline: none;
+}
+
+.input-large {
+  width: 100%; /* 가로 너비 전체로 설정 */
+  height: 200px; /* 높이 고정 */
+  padding: 10px; /* 안쪽 여백 설정 */
+  border-radius: 20px;
+  border: 5px solid #7096D1;
+  font-size: 20px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 800;
+  outline: none;
+}
+
+.input-post {
+  width: 202%;
+  height: 15vh;
+  position: relative;
+}
+
+.read-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개의 카드를 표시 */
+  grid-gap: 20px; /* 카드 간의 간격 */
+  padding: 20px; /* 컨테이너의 내부 여백 */
+  overflow-y: auto; /* 세로 스크롤바 설정 (필요한 경우) */
+  max-height: 580px; /* 컨테이너의 최대 높이 설정 */
+}
+
+.read-container::-webkit-scrollbar {
+  width: 12px; /* 스크롤바 너비 */
+  background-color: #9A9693;
+  border-radius: 10px; 
+}
+
+.read-container::-webkit-scrollbar-thumb {
+  background-color: #7096D1;
+  border-radius: 10px;  
+}
+
+.read-container::-webkit-scrollbar-button {
+  display: none; /* 스크롤바 버튼(삼각형) 제거 */
+}
+
+.card {
+  height: 220px;
+  background-color: #BAD6EB; /* 카드 배경색 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  border-radius: 10px; /* 테두리 둥근 모서리 */
+  padding: 20px; /* 카드 내부 패딩 */
+  cursor: pointer; /* 마우스 오버시 포인터 변경 */
+  transition: transform 0.2s; /* 호버 효과를 위한 전환 */
+}
+
+.card:hover {
+  transform: translateY(-5px); /* 호버시 카드를 약간 위로 이동 */
+}
+
+.card-image {
+  width: 50%; /* 카드 너비에 맞게 이미지 크기 조정 */
+  object-fit: cover; /* 이미지 비율을 유지하면서 영역 채움 */
+}
+
+.card-content {
+  width: 100%; /* 카드 너비에 맞게 내용 너비 조정 */
+  padding: 15px; /* 내용 주위에 패딩 추가 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+.card-title {
+  text-align: center;
+  color: #334EAC; 
+  font-size: 30px; /* 제목 글꼴 크기 */
+  font-weight: bold; /* 글꼴 두께 */
+  margin: 10px 0; /* 위아래 마진 추가 */
+}
+
+.card-description {
+  margin-right: 10px;
+  font-size: 15px; /* 설명 글꼴 크기 */
+}
+.card-descriptionimg {
+  width: 20%; /* 카드 너비에 맞게 이미지 크기 조정 */
+  object-fit: cover;
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5); /* 반투명 검은색 배경 */
+}
+
+/* 모달 내용 스타일 */
+.modal-content {
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 80%; /* 모달 너비를 상대적으로 설정 */
+  max-width: 500px;
+}
+
+/* 모달 닫기 버튼 스타일 */
+.close {
+  float: left;
+  font-size: 3rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
+
+.button { 
+  padding: 8px 40px;
+  margin-top: 10px;
+ border-radius: 15px;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ font-size: 30px;
+ font-family: 'Roboto', sans-serif;
+ font-weight: 800;
+ color: #334EAC;
+ background: #BAD6EB;
+ border: 3px #334EAC solid;
+ border: none;
+ border-radius: 5px;
+ cursor: pointer;
+ transition: background-color 0.3s ease;
+
+}
+.button:hover {
+  background-color: #25368b; /* 호버 상태일 때 색상 변경 */
+}
+
+.budget-container {
+  display: flex; /* Flexbox 레이아웃 적용 */
+  align-items: center; /* 수직 방향 중앙 정렬 */
+}
+
+/* 미디어 쿼리: 태블릿과 모바일 기기용 */
+@media (max-width: 768px) {
+  .airplane-image {
+    top: 1%;
+    width: 25vw; /* 더 작은 뷰포트에서 크기 조정 */
+    max-width: 150px;
+    transform: translateX(30%); /* 센터 정렬을 위해 조정 */
+  }
+
+  .header-label {
+    font-size: 8vw; /* 글꼴 크기 증가 */
+    margin: 1em 0; /* 상하 여백 조정 */
+  }
+
+  .header {
+    flex-direction: column; /* 버튼을 세로로 정렬 */
+  }
+
+  .headerbutton {
+    margin-bottom: 1rem; /* 버튼 사이의 마진 추가 */
+  }
+
+  .mainpage-wrapper,
+  .mainarticle {
+    width: 90%; /* 화면 너비에 따라 조정 */
+    min-height: auto; /* 높이 자동 조정 */
+    padding: 20px; /* 내부 패딩 증가 */
+  }
+
+  .modal-content {
+    width: 90%; /* 더 작은 화면에 맞게 모달 너비 조정 */
+  }
+
+  .card, .card-image {
+    width: 100%; /* 카드와 이미지를 전체 너비로 설정 */
+  }
+
+  .read-container {
+    grid-template-columns: 1fr; /* 모바일 기기에서 한 줄에 하나의 카드만 표시 */
+  }
+
+  .inputs-row1 input,
+  .inputs-row2 input,
+  .input-large {
+    font-size: 5vw; /* 입력 필드의 글꼴 크기를 조정 */
+  }
+  .title {
+    font-size: 20px; /* 더 작은 화면에 맞게 글꼴 크기 줄임 */
+    margin-left: 5px; /* 마진도 조정 */
+  }
+}
+
+/* 미디어 쿼리: 큰 화면용 (예: 데스크탑) */
+@media (min-width: 1200px) {
+  .airplane-image {
+    left: 25%; /* 큰 화면에서 위치 조정 */
+  }
+
+  .header-label {
+    font-size: 80px; /* 최대 글꼴 크기로 고정 */
+  }
+}
+/* 추가: 매우 작은 화면을 위한 미디어 쿼리 */
+@media (max-width: 480px) {
+  .inputs-row1 input,
+  .inputs-row2 input,
+  .input-large {
+    font-size: 4vw; /* 매우 작은 화면에서 글꼴 크기 조정 */
+  }
+  .title {
+    font-size: 18px; /* 더 작은 화면에 맞게 글꼴 크기 더 줄임 */
+  }
+  /* 기타 매우 작은 화면을 위한 스타일 조정 */
+}
+
+.input-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* 간격 조정 */
+}
+
+.header-title {
+  margin-left: 5px;
+  font-size: 27px;
+  font-weight: bold;
+}
+
+.icon-small {
+  width: 35px;
+  height: 35px;
+  margin-right: 5px; /* 아이콘과 텍스트 사이의 간격 조정 */
+}
+
+.icon-medium {
+  width: 70px;
+  height: 40px;
+  margin: 0 15px; /* 좌우 간격 조정 */
+}
+
+.icon-large {
+  width: 55px;
+  height: 55px;
+  margin-right: 5px;
+}
+
+.inputs-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+
+.input-row {
+  display: flex;
+  justify-content: space-between;
+  width: 99%; /* 컨테이너의 전체 너비를 사용 */
+}
+
+.input-group {
+  width: 48%; /* 두 개의 입력 그룹이 각각 반씩 차지하도록 설정 */
+  margin-bottom: 20px;
+}
+
+.input-label {
+  display: block; /* 레이블을 블록 요소로 설정하여 아이콘과 함께 한 줄에 표시 */
+  margin-bottom: 10px; /* 입력 필드와의 간격을 설정 */
+}
+
+.icon-small {
+  vertical-align: middle; /* 아이콘을 텍스트 중앙에 정렬 */
+  margin-right: 5px;
+}
+
+.input-large {
+  height: 150px; /* 텍스트 영역의 높이 설정 */
+}
+
+.search-container {
+  margin-bottom: 20px;
+}
+
+
+.ranking-section {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.ranking-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.ranking-search {
+  margin-bottom: 1rem;
+}
+
+.ranking-content {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.ranking-list {
+  background-color: white;
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+}
+.ranking-posts {
+  width: 70%;
+}
+.ranking-users {
+  width: 25%;
+}
+
+
+.ranking-posts ol, .ranking-users ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ranking-posts li, .ranking-users li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.ranking-posts li:last-child, .ranking-users li:last-child {
+  border-bottom: none;
+}
+
+.ranking-posts h2, .ranking-users h2 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
