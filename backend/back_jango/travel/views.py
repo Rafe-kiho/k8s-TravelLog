@@ -5,7 +5,7 @@ from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from travel.serializers import TravelSerializer
 from travel.models import Travel, UserData, Like
-from django.db.models import F
+from django.db.models import F, Count, Q
 
 class TravelAPI(viewsets.ModelViewSet):
     queryset = Travel.objects.all()
@@ -17,6 +17,23 @@ class TravelAPI(viewsets.ModelViewSet):
         print("Success")
         return Response(serializer.data)
     
+    @action(detail=True, methods=['GET'])
+    def ranked_travel_list(self, request):
+        city = request.query_params.get('city', None)
+        tag = request.query_params.get('tag', None)
+        
+        query = Q()
+        if city:
+            query &= Q(City=city)
+        if tag:
+            query &= Q(Tag=tag)
+
+        # 좋아요 수 기준 내림차순 정렬
+        travels = Travel.objects.annotate(like_count=Count('likes')).filter(query).order_by('-like_count')
+        serializer = TravelSerializer(travels, many=True)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def create(self, request, *args, **kwargs):
         user_name = request.data.get('name')  
         if not user_name:
