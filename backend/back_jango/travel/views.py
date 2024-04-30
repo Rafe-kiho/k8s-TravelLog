@@ -1,11 +1,11 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from travel.serializers import TravelSerializer
 from travel.models import Travel, UserData, Like
-from django.db.models import F, Count, Q
+from django.db.models import Sum, Count, Q
 
 class TravelAPI(viewsets.ModelViewSet):
     queryset = Travel.objects.all()
@@ -33,6 +33,16 @@ class TravelAPI(viewsets.ModelViewSet):
         serializer = TravelSerializer(travels, many=True)
         
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['GET'])
+    def top_users(self, request):
+        top_users = (
+            Travel.objects.values('name')
+            .annotate(total_likes=Count('likes'))  # 작성자별로 좋아요 수 합산
+            .order_by('-total_likes')[:5]  # 내림차순 상위 5명
+        )
+
+        return Response(top_users, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         user_name = request.data.get('name')  

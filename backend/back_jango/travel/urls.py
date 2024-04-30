@@ -13,6 +13,7 @@ urlpatterns = [
     #path('', include(travel_router.urls)),
     path('', TravelAPI.as_view({'get': 'list', 'post': 'create'}), name='travel-list-create'),
     path('rankedlist/', TravelAPI.as_view({'get': 'ranked_travel_list'}), name='ranked_travel_list'),
+    path('rankeduser/', TravelAPI.as_view({'get': 'top_users'}), name='ranked_user_list'),
     path('<int:pk>/like/', TravelAPI.as_view({'post': 'like'}), name='travel-like'),
     path('login/', LoginAPI.as_view(), name='login'),
 ]
