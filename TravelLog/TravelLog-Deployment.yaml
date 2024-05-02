@@ -1,70 +1,110 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  MYAPP
-  namespace: default
+  name: example-deployment
   labels:
-    app:  MYAPP
+    app: example
+  annotations:
+    kubernetes.io/change-cause: "Update for scaling"
 spec:
+  replicas: 3
   selector:
     matchLabels:
-      app: MYAPP
-  replicas: 1
+      app: example
   strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
     type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 10
+  revisionHistoryLimit: 10
+  paused: false
+  progressDeadlineSeconds: 600
   template:
     metadata:
       labels:
-        app:  MYAPP
+        app: example
     spec:
-      # initContainers:
-        # Init containers are exactly like regular containers, except:
-          # - Init containers always run to completion.
-          # - Each init container must complete successfully before the next one starts.
-      containers:
-      - name:  MYAPP
-        image:  MYAPP:latest
-        resources:
-          requests:
-            cpu: 100m
-            memory: 100Mi
-          limits:
-            cpu: 100m
-            memory: 100Mi
-        livenessProbe:
-          tcpSocket:
-            port: 80
-          initialDelaySeconds: 5
-          timeoutSeconds: 5
-          successThreshold: 1
-          failureThreshold: 3
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /_status/healthz
-            port: 80
-          initialDelaySeconds: 5
-          timeoutSeconds: 2
-          successThreshold: 1
-          failureThreshold: 3
-          periodSeconds: 10
-        env:
-        - name: DB_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: MYAPP
-              key: DB_HOST
-        ports:
-        - containerPort:  80
-          name:  MYAPP
-        volumeMounts:
-        - name: localtime
-          mountPath: /etc/localtime
       volumes:
-        - name: localtime
-          hostPath:
-            path: /usr/share/zoneinfo/Asia/Shanghai
+        - name: volume
+          persistentVolumeClaim:
+            claimName: example-pvc
+      containers:
+        - name: example-container
+          image: example/image:latest
+          ports:
+            - containerPort: 80
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", "sleep 10"]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 80
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          env:
+            - name: ENV_VAR
+              value: "value"
+          volumeMounts:
+            - mountPath: "/var/www/html"
+              name: volume
       restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 3000
+        fsGroup: 2000
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: "disktype"
+                    operator: In
+                    values:
+                      - ssd
+      tolerations:
+        - key: "example-key"
+          operator: "Equal"
+          value: "example-value"
+          effect: "NoSchedule"
+      hostAliases:
+        - ip: "192.168.1.100"
+          hostnames:
+            - "foo.local"
+            - "bar.local"
+      nodeSelector:
+        disktype: ssd
+      serviceAccountName: example-service-account
+      imagePullSecrets:
+        - name: myregistrykey
+      initContainers:
+        - name: init-myservice
+          image: example/init-service:latest
+          ports:
+            - containerPort: 80
+
+# 메타데이터를 포함하여 Deployment의 이름과 라벨을 정의합니다.
+# 레플리카 수, 업데이트 전략, 준비 상태 확인 등의 다양한 배포 설정을 포함합니다.
+# 컨테이너 스펙은 이미지, 포트, 프로브(생존 및 준비), 리소스 요청 및 제한, 환경 변수 등을 정의합니다.
+# 보안 컨텍스트, 애핀리티 및 톨러레이션 설정을 통해 특정 노드에 배포되거나 노드에서 배제되도록 구성할 수 있습니다.
+# 볼륨 및 초기화 컨테이너를 사용하여 상태 데이터를 관리하거나 시작 전에 필요한 작업을 수행합니다.
