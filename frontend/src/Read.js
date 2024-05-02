@@ -70,7 +70,7 @@ function Read() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <img src={tag} alt='tag' className="card-descriptionimg" />
-            <div style={{ width: "10px" }}></div
+            <div style={{ width: "10px" }}></div>
             <div style={{ fontSize: '17px', textAlign: 'center', fontWeight: 'bold' }}>{item.Tag}</div>
           </div>
         </div>
