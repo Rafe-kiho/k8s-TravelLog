@@ -1,17 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Write from './Write';
 import Read from './Read';
-import Ranking from './Ranking'; // Ranking 컴포넌트를 import 해야 합니다.
-import airplaneimg from './assets/airplane.png';
+import Ranking from './Ranking';
+import Login from './Login'; // Login 컴포넌트 임포트
+import airplaneimg from './assets/airplane.png'; // airplane 이미지 경로 확인
 
 function App() {
   const [activeButton, setActiveButton] = useState('write');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      const username = localStorage.getItem('username');
+      const expiration = localStorage.getItem('expiration');
+      const currentTime = new Date().getTime();
+
+      if (username && expiration && currentTime > parseInt(expiration)) {
+        localStorage.removeItem('username');
+        localStorage.removeItem('expiration');
+        setIsLoggedIn(false);
+      } else if (username) {
+        setIsLoggedIn(true);
+      }
+    };
+
+    checkLoginStatus();
+    const interval = setInterval(checkLoginStatus, 60000); // 매 분마다 로그인 상태 확인
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleLogin = (username) => {
+    const expirationTime = new Date().getTime() + 3600000; // 현재 시간으로부터 1시간 후
+    localStorage.setItem('username', username);
+    localStorage.setItem('expiration', expirationTime.toString());
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('username'); // 로컬 스토리지에서 사용자 이름 제거
+    localStorage.removeItem('expiration'); // 만료 시간 제거
+    window.location.reload(); // 페이지를 새로고침하여 로그인 상태를 리셋
+  };
+
+  if (!isLoggedIn) {
+    return <Login onLogin={handleLogin} />;
+  }
 
   return (
     <div className="mainbackground">
-      <label className='header-label'>Travelog</label>
-      <img src={airplaneimg} alt="airplane" className="airplane-image" />
+      <div>
+        <label className='header-label'>Travelog</label>
+        <img src={airplaneimg} alt="airplane" className="airplane-image" />
+        <button className="headerbutton logout-button" onClick={handleLogout}>Logout</button>
+      </div>
       <div className="mainpage-wrapper">
         <header className="header">
           <div
@@ -26,7 +69,6 @@ function App() {
           >
             Read
           </div>
-          {/* Ranking 버튼 추가 */}
           <div
             className={`headerbutton ${activeButton === 'ranking' ? 'activeButton' : ''}`}
             onClick={() => setActiveButton('ranking')}
@@ -37,7 +79,7 @@ function App() {
         <main className="mainarticle">
           {activeButton === 'write' && <Write />}
           {activeButton === 'read' && <Read />}
-          {activeButton === 'ranking' && <Ranking />} {/* Ranking 컴포넌트 렌더링 */}
+          {activeButton === 'ranking' && <Ranking />}
         </main>
       </div>
     </div>
