@@ -10,7 +10,7 @@ function Ranking() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('여기에 API 엔드포인트 URL');
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/travel/api/`);
         setPosts(response.data.sort((a, b) => b.recommendations - a.recommendations));
       } catch (error) {
         console.error('포스팅 데이터를 불러오는 데 실패했습니다', error);
@@ -19,7 +19,7 @@ function Ranking() {
 
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('여기에 API 엔드포인트 URL');
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/travel/`);
         setUsers(response.data.sort((a, b) => b.recommendations - a.recommendations));
       } catch (error) {
         console.error('유저 데이터를 불러오는 데 실패했습니다', error);
