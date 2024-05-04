@@ -21,10 +21,22 @@ function Write() {
   const handleJournalChange = (e) => setJournal(e.target.value);
 
   const saveData = () => {
-    const data = { City: city, Money: money, Tag: tag, Date: period, Journal: journal };
-    axios.post(`${process.env.REACT_APP_API_BASE_URL}/travel/api/`, data)
+    // 로컬 스토리지에서 사용자 이름(name)을 가져옵니다.
+    const userName = localStorage.getItem('name');
+
+    const data = {
+      City: city,
+      Money: money,
+      Tag: tag,
+      Date: period,
+      Journal: journal,
+      name: userName // 백엔드에서 요구하는 사용자 이름 필드 추가
+    };
+
+    axios.post(`${process.env.REACT_APP_API_BASE_URL}/travel/`, data)
       .then(response => {
         alert('저장되었습니다.');
+        // 모든 입력 필드를 초기화합니다.
         setCity('');
         setMoney('');
         setPeriod('');
@@ -32,7 +44,7 @@ function Write() {
         setJournal('');
       })
       .catch(error => {
-        alert('저장에 실패하였습니다.');
+        alert('저장에 실패하였습니다. 오류: ' + error.message);
       });
   };
 
