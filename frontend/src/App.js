@@ -12,15 +12,15 @@ function App() {
 
   useEffect(() => {
     const checkLoginStatus = () => {
-      const username = localStorage.getItem('username');
+      const name = localStorage.getItem('name');
       const expiration = localStorage.getItem('expiration');
       const currentTime = new Date().getTime();
 
-      if (username && expiration && currentTime > parseInt(expiration)) {
-        localStorage.removeItem('username');
+      if (name && expiration && currentTime > parseInt(expiration)) {
+        localStorage.removeItem('name');
         localStorage.removeItem('expiration');
         setIsLoggedIn(false);
-      } else if (username) {
+      } else if (name) {
         setIsLoggedIn(true);
       }
     };
@@ -31,15 +31,15 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleLogin = (username) => {
+  const handleLogin = (name) => {
     const expirationTime = new Date().getTime() + 3600000; // 현재 시간으로부터 1시간 후
-    localStorage.setItem('username', username);
+    localStorage.setItem('name', name);
     localStorage.setItem('expiration', expirationTime.toString());
     setIsLoggedIn(true);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('username'); // 로컬 스토리지에서 사용자 이름 제거
+    localStorage.removeItem('name'); // 로컬 스토리지에서 사용자 이름 제거
     localStorage.removeItem('expiration'); // 만료 시간 제거
     window.location.reload(); // 페이지를 새로고침하여 로그인 상태를 리셋
   };
