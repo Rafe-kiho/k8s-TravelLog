@@ -3,21 +3,24 @@ import axios from 'axios';
 import './App.css';
 import travelLogLogo from './assets/TravelLog_with_k8s.png'; // 이미지 경로 확인
 
-function Login() {
-  const [username, setUsername] = useState('');
+function Login({ onLogin }) {
+  const [name, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/travel/login/`, {
-        name: username,
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/login/`, {
+        name: name,
         password: password
       });
-      localStorage.setItem('username', response.data.user.name);
+      // 로컬 스토리지에 사용자 이름과 만료 시간을 저장합니다.
+      const expirationTime = new Date().getTime() + 3600000; // 로그인 후 1시간 유효
+      localStorage.setItem('name', response.data.user.name);
+      localStorage.setItem('expiration', expirationTime.toString());
       alert('로그인 성공!');
-      // 리다이렉트하거나 상태 업데이트
+      onLogin(response.data.user.name); // App 컴포넌트의 로그인 상태 업데이트 함수 호출
     } catch (error) {
       if (error.response && error.response.status === 404) {
         setLoginError('사용자를 찾을 수 없습니다.');
@@ -34,14 +37,14 @@ function Login() {
       <div className="login-container">
         <form onSubmit={handleLogin} className="login-form">
           <div className="login-input-group">
-            <label htmlFor="username" className="input-label">ID</label>
+            <label htmlFor="name" className="input-label">ID</label>
             <input
               type="text"
-              id="username"
+              id="name"
               placeholder="ID 입력.."
-              value={username}
+              value={name}
               onChange={e => setUsername(e.target.value)}
-              className="login-input-field" // 새로운 클래스 적용
+              className="login-input-field"
               required
             />
           </div>
@@ -53,7 +56,7 @@ function Login() {
               placeholder="PW 입력.."
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className="login-input-field" // 새로운 클래스 적용
+              className="login-input-field"
               required
             />
           </div>
