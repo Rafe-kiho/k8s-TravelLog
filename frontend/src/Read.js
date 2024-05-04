@@ -35,12 +35,20 @@ function Read() {
   };
 
   const handleLike = async (travelId) => {
-    const username = localStorage.getItem('username'); // 사용자 이름 로컬 스토리지에서 가져오기
+    const username = localStorage.getItem('name'); // 로컬 스토리지에서 사용자 이름 가져오기
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/travel/${travelId}/like/`, {
         name: username
       });
       setLikeMessage(response.data.message);
+      // 좋아요 후의 데이터를 업데이트하여 리렌더링
+      const updatedData = data.map(item => {
+        if (item.TravelID === travelId) {
+          return { ...item, likes_count: item.likes_count + 1 };
+        }
+        return item;
+      });
+      setData(updatedData);
     } catch (error) {
       if (error.response) {
         setLikeMessage(error.response.data.message);
