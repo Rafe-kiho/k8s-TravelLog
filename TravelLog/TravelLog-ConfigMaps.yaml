@@ -1,9 +1,8 @@
-kind: ConfigMap
 apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: CM
-  namespace: default
+  name: django-config
+  namespace: backend
 data:
-  key: default
-
-  
+  DEBUG: "True"
+  ALLOWED_HOSTS: "*"
