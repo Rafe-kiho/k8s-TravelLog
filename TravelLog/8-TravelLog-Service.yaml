@@ -9,9 +9,9 @@ spec:
   selector:
     app: react-frontend
   ports:
-  - name: https
-    port: 443
+  - port: 3030
     targetPort: 3000
+    protocol: TCP
 
 ---
 # Django Backend Service

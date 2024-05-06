@@ -17,6 +17,8 @@ spec:
       containers:
       - name: react-frontend
         image: shinkiho/travel-log-front:1.0
+        ports:
+        - containerPort: 3000
         env:
         - name: REACT_APP_API_BASE_URL
           valueFrom:
