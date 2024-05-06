@@ -17,22 +17,23 @@ class TravelAPI(viewsets.ModelViewSet):
         print("Success")
         return Response(serializer.data)
     
-    @action(detail=True, methods=['GET'])
+    @action(detail=False, methods=['GET'])
     def ranked_travel_list(self, request):
         city = request.query_params.get('city', None)
         tag = request.query_params.get('tag', None)
-        
+    
         query = Q()
         if city:
-            query &= Q(City=city)
+            query |= Q(City__icontains=city)  # 도시 이름 포함 검색
         if tag:
-            query &= Q(Tag=tag)
-
+            query |= Q(Tag__icontains=tag)  # 태그 포함 검색
+    
         # 좋아요 수 기준 내림차순 정렬
         travels = Travel.objects.annotate(like_count=Count('likes')).filter(query).order_by('-like_count')
         serializer = TravelSerializer(travels, many=True)
-        
+    
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
     @action(detail=False, methods=['GET'])
     def top_users(self, request):
