@@ -1,89 +1,81 @@
+# React Frontend Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: react-nginx-deployment
+  name: react-frontend
   namespace: frontend
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: react-nginx
+      app: react-frontend
   template:
     metadata:
       labels:
-        app: react-nginx
+        app: react-frontend
     spec:
       containers:
-      - name: nginx
-        image: nginx:1.19.0
-        ports:
-        - containerPort: 80
-      - name: react
-        image: react-app:latest
-        ports:
-        - containerPort: 3000
+      - name: react-frontend
+        image: shinkiho/travel-log-front:1.0
+        env:
+        - name: REACT_APP_API_BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: react-config
+              key: REACT_APP_API_BASE_URL
+
 ---
+# Django Backend Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: django-mysql-deployment
+  name: django-backend
   namespace: backend
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: django-mysql
+      app: django-backend
   template:
     metadata:
       labels:
-        app: django-mysql
+        app: django-backend
     spec:
       containers:
-      - name: django
-        image: django-app:latest
+      - name: django-backend
+        image: seonxx/django-container:latest
         ports:
         - containerPort: 8000
         env:
-        - name: MYSQL_HOST
-          value: mysql
-        - name: MYSQL_DB
-          value: appdb
-        - name: MYSQL_USER
+        - name: DJANGO_SETTINGS_MODULE
+          value: "your_project.settings"
+        - name: SECRET_KEY
           valueFrom:
             secretKeyRef:
-              name: mysql-credentials
-              key: username
-        - name: MYSQL_PASSWORD
+              name: django-secret
+              key: SECRET_KEY
+        - name: DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: django-config
+              key: DATABASE_NAME
+        - name: DATABASE_USER
+          valueFrom:
+            configMapKeyRef:
+              name: django-config
+              key: DATABASE_USER
+        - name: DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mysql-credentials
-              key: password
-      - name: mysql
-        image: mysql:5.7
-        ports:
-        - containerPort: 3306
-        env:
-        - name: MYSQL_ROOT_PASSWORD
+              name: django-secret
+              key: DATABASE_PASSWORD
+        - name: DATABASE_HOST
           valueFrom:
-            secretKeyRef:
-              name: mysql-credentials
-              key: password
-        - name: MYSQL_DATABASE
-          value: appdb
-        - name: MYSQL_USER
+            configMapKeyRef:
+              name: django-config
+              key: DATABASE_HOST
+        - name: DATABASE_PORT
           valueFrom:
-            secretKeyRef:
-              name: mysql-credentials
-              key: username
-        - name: MYSQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-credentials
-              key: password
-        volumeMounts:
-        - name: mysql-storage
-          mountPath: /var/lib/mysql
-      volumes:
-      - name: mysql-storage
-        persistentVolumeClaim:
-          claimName: mysql-pvc
+            configMapKeyRef:
+              name: django-config
+              key: DATABASE_PORT

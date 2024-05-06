@@ -1,14 +1,46 @@
-
+# RoleBinding for Team Dev
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: backend-role-binding
-  namespace: backend
+  name: team-dev-rolebinding
+  namespace: frontend
 subjects:
-  - kind: ServiceAccount
-    name: backend-service-account
-    namespace: backend
+- kind: ServiceAccount
+  name: team-dev-account
+  namespace: frontend
 roleRef:
   kind: Role
-  name: backend-role
   apiGroup: rbac.authorization.k8s.io
+  name: team-dev-role
+
+---
+# RoleBinding for Team Infra
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: team-infra-rolebinding
+  namespace: backend
+subjects:
+- kind: ServiceAccount
+  name: team-infra-account
+  namespace: backend
+roleRef:
+  kind: Role
+  apiGroup: rbac.authorization.k8s.io
+  name: team-infra-role
+
+---
+# RoleBinding for Team Sec
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: team-sec-rolebinding
+  namespace: frontend
+subjects:
+- kind: ServiceAccount
+  name: team-sec-account
+  namespace: frontend
+roleRef:
+  kind: Role
+  apiGroup: rbac.authorization.k8s.io
+  name: team-sec-role

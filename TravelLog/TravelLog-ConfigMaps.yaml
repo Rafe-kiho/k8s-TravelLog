@@ -4,5 +4,16 @@ metadata:
   name: django-config
   namespace: backend
 data:
-  DEBUG: "True"
-  ALLOWED_HOSTS: "*"
+  DATABASE_NAME: "travel_log"
+  DATABASE_USER: "travel_admin"
+  DATABASE_HOST: "34.64.201.194"
+  DATABASE_PORT: "3306"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: react-config
+  namespace: frontend
+data:
+  REACT_APP_API_BASE_URL: "http://django-backend.backend.svc.cluster.local:8000"

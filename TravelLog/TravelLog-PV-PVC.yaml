@@ -1,29 +1,28 @@
+# PersistentVolume for Django Backend
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: mysql-pv
-  namespace: backend
+  name: django-pv
 spec:
   capacity:
-    storage: 5Gi
+    storage: 10Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: manual
   hostPath:
-    path: /mnt/data/mysql
+    path: "/mnt/data/django"
 
 ---
+# PersistentVolumeClaim for Django Backend
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pvc
+  name: django-pvc
   namespace: backend
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi
-  storageClassName: manual
-  volumeName: mysql-pv
+      storage: 10Gi
+  volumeName: django-pv

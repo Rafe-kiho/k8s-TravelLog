@@ -1,3 +1,4 @@
+# Network Policy for Backend
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -6,27 +7,43 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: django-mysql
+      app: django-backend
   policyTypes:
     - Ingress
     - Egress
   ingress:
     - from:
-      - podSelector:
+      - namespaceSelector:
           matchLabels:
-            app: django-mysql
-      ports:
-        - protocol: TCP
-          port: 8000  # Django
-        - protocol: TCP
-          port: 3306  # MySQL
-  egress:
-    - to:
-      - podSelector:
-          matchLabels:
-            app: django-mysql
+            name: frontend
       ports:
         - protocol: TCP
           port: 8000
-        - protocol: TCP
-          port: 3306
+  egress:
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            name: frontend
+
+---
+# Network Policy for Frontend
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: frontend-network-policy
+  namespace: frontend
+spec:
+  podSelector:
+    matchLabels:
+      app: react-frontend
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+      - ipBlock:
+          cidr: 192.168.0.0/24
+  egress:
+    - to:
+      - ipBlock:
+          cidr: 192.168.0.0/24
