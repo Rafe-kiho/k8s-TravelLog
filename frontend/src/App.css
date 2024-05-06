@@ -260,13 +260,121 @@
 }
 
 /* 모달 내용 스타일 */
+/* 모달 컨텐츠 스타일 */
 .modal-content {
+  background-color: #D0E3FF;
   padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 80%; /* 모달 너비를 상대적으로 설정 */
-  max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 600px; /* 화면 크기에 따라 조정될 수 있도록 변경 */
+  max-height: auto; /* 최대 높이 제한을 제거 */
+  overflow-y: auto; /* 내용이 넘칠 경우 스크롤바 생성 */
+  color: #333;
+  font-family: 'Arial', sans-serif;
+  text-align: left;
 }
+
+/* 화면 크기에 따라 다르게 스타일 적용 */
+@media (max-width: 768px) {
+  .modal-content {
+    max-width: 90%; /* 모바일에서는 더 넓은 너비 사용 */
+  }
+
+  .modal-header h2, .modal-content li, .madal-review-field {
+    font-size: 16px; /* 모바일에서는 글씨 크기 줄이기 */
+  }
+  
+  .ranking-content {
+    flex-direction: column; /* 세로 정렬 */
+  }
+
+  .ranking-posts, .ranking-users {
+    width: 100%; /* 너비를 100%로 설정 */
+  }
+
+  .ranking-posts ol, .ranking-users ol {
+    width: 100%; /* 내부 목록 너비 조정 */
+    padding: 10px; /* 패딩 조정 */
+  }
+
+  .ranking-posts li, .ranking-users li {
+    font-size: 16px; /* 작은 화면에서 폰트 크기 조정 */
+  }
+}
+
+.madal-review-field {
+  width: calc(100% - 20px); /* 좌우 패딩을 고려한 너비 설정 */
+  padding: 10px;
+  border-radius: 20px;
+  border: 5px solid #7096D1;
+  margin-bottom: 10px; /* 다음 요소와의 거리 */
+  font-size: 20px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 800;
+  outline: none;
+}
+
+
+.modal-header h2 {
+  font-size: 28px; /* Larger font size */
+  font-weight: bold; /* Bold text */
+  color: #333; /* Darker text color */
+  text-align: center; /* Center alignment */
+}
+
+
+.modal-header, .modal-body {
+  padding: 10px 0; /* 상하 여백 */
+}
+
+.modal-header {
+  font-size: 20px; /* 제목의 글씨 크기 */
+  color: #2a2a2a; /* 어두운 회색 */
+  margin-bottom: 10px; /* 제목 아래 여백 */
+}
+
+.modal-body {
+  font-size: 16px; /* 내용의 글씨 크기 */
+}
+
+
+.modal-content li {
+  font-size: 20px;
+  display: flex;
+  align-items: center; /* 수직 중앙 정렬 */
+  margin-bottom: 10px; /* 요소 간의 마진 */
+}
+
+.modal-content-vertical {
+  float: left;
+  padding: auto;
+}
+
+.like-button {
+  background: url('./assets/like.png') no-repeat center center;
+  border: none;
+  width: 50px; /* 버튼 크기를 키움 */
+  height: 50px;
+  cursor: pointer;
+  background-size: contain;
+  outline: none;
+  margin-left: 20px; /* 버튼과 텍스트 사이의 간격 */
+  align-items: center
+  ;
+}
+
+.like-button p {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 텍스트를 버튼 중앙에 위치 */
+  margin: 0;
+  color: white; /* 텍스트 색상을 흰색으로 */
+  font-size: 16px; /* 텍스트 크기 */
+}
+
+
 
 /* 모달 닫기 버튼 스타일 */
 .close {
@@ -308,6 +416,23 @@
 
 /* 미디어 쿼리: 태블릿과 모바일 기기용 */
 @media (max-width: 768px) {
+
+  .ranking-content {
+    flex-direction: column;
+  }
+
+  .modal-content {
+    width: 80%;
+    padding: 15px;
+  }
+
+  .modal-header h2, .modal-body p {
+    font-size: 18px;
+  }
+
+  .input-field, .ranked-post-item, .ranking-list ranking-users li {
+    font-size: 16px;
+  }
   .airplane-image {
     top: 1%;
     width: 25vw; /* 더 작은 뷰포트에서 크기 조정 */
@@ -392,6 +517,18 @@
     font-size: 18px; /* 더 작은 화면에 맞게 글꼴 크기 더 줄임 */
   }
   /* 기타 매우 작은 화면을 위한 스타일 조정 */
+  
+  .modal-content {
+    width: 90%;
+  }
+
+  .modal-header h2, .modal-body p {
+    font-size: 16px;
+  }
+
+  .input-field, .ranked-post-item, .ranking-list ranking-users li {
+    font-size: 14px;
+  }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
@@ -497,12 +634,11 @@
 }
 
 .ranking-list {
-  background-color: white;
+  background-color: #BAD6EB;
   border-radius: 10px;
   padding: 1rem;
   margin: 1rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
 }
 .ranking-posts {
   width: 70%;
@@ -512,15 +648,36 @@
 }
 
 
-.ranking-posts ol, .ranking-users ol {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.ranking-posts ol {
+  background-color: white;
+  width: calc(100% - 20px); /* 좌우 패딩을 고려한 너비 설정 */
+  padding: 10px;
+  border-radius: 20px;
+  border: 5px solid #7096D1;
+  margin-bottom: 10px; /* 다음 요소와의 거리 */
+  font-size: 20px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 800;
+  outline: none;
+}
+.ranking-users ol {
+  padding: 10px;
+  border-radius: 20px;
+  margin-bottom: 10px; /* 다음 요소와의 거리 */
+  font-size: 20px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 800;
+  outline: none;
 }
 
 .ranking-posts li, .ranking-users li {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #f0f0f0;
+  background: #BAD6EB;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .ranking-posts li:last-child, .ranking-users li:last-child {
@@ -530,6 +687,19 @@
 .ranking-posts h2, .ranking-users h2 {
   text-align: center;
   margin-bottom: 0.5rem;
+}
+
+.ranked-post-item {
+  width: calc(100% - 20px);
+  padding: 10px;
+  border-radius: 20px;
+  border: 5px solid #7096D1;
+  marginBottom: 10px;
+  fontSize: 20px;
+  fontFamily: 'Roboto, sans-serif';
+  fontWeight: 800;
+  outline: none;
+  cursor: pointer;
 }
 /* login */
 
