@@ -4,10 +4,10 @@ metadata:
   name: django-config
   namespace: backend
 data:
-  DATABASE_NAME: "travel_log"
-  DATABASE_USER: "travel_admin"
-  DATABASE_HOST: "34.64.201.194"
-  DATABASE_PORT: "3306"
+  DJANGO_DB_NAME: "travel_log"
+  DJANGO_DB_USER: "travel_admin"
+  DJANGO_DB_HOST: "34.64.201.194"
+  DJANGO_DB_PORT: "3306"
 
 ---
 apiVersion: v1

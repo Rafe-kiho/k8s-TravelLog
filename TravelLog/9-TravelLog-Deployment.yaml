@@ -25,7 +25,7 @@ spec:
               key: REACT_APP_API_BASE_URL
 
 ---
-# Django Backend Deployment
+# Django Backend DeploymentapiVersion: apps/v1
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -47,35 +47,33 @@ spec:
         ports:
         - containerPort: 8000
         env:
-        - name: DJANGO_SETTINGS_MODULE
-          value: "your_project.settings"
-        - name: SECRET_KEY
+        - name: DJANGO_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: django-config
+              key: DJANGO_DB_NAME
+        - name: DJANGO_DB_USER
+          valueFrom:
+            configMapKeyRef:
+              name: django-config
+              key: DJANGO_DB_USER
+        - name: DJANGO_DB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: django-secret
-              key: SECRET_KEY
-        - name: DATABASE_NAME
+              key: DJANGO_DB_PASSWORD
+        - name: DJANGO_DB_HOST
           valueFrom:
             configMapKeyRef:
               name: django-config
-              key: DATABASE_NAME
-        - name: DATABASE_USER
+              key: DJANGO_DB_HOST
+        - name: DJANGO_DB_PORT
           valueFrom:
             configMapKeyRef:
               name: django-config
-              key: DATABASE_USER
-        - name: DATABASE_PASSWORD
+              key: DJANGO_DB_PORT
+        - name: DJANGO_SECRET_KEY
           valueFrom:
             secretKeyRef:
               name: django-secret
-              key: DATABASE_PASSWORD
-        - name: DATABASE_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: django-config
-              key: DATABASE_HOST
-        - name: DATABASE_PORT
-          valueFrom:
-            configMapKeyRef:
-              name: django-config
-              key: DATABASE_PORT
+              key: DJANGO_SECRET_KEY

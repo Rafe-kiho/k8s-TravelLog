@@ -5,14 +5,13 @@ metadata:
   name: react-frontend
   namespace: frontend
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: react-frontend
   ports:
   - name: https
     port: 443
     targetPort: 3000
-  loadBalancerIP: 192.168.0.26
 
 ---
 # Django Backend Service
