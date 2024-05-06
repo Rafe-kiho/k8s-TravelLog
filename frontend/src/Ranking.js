@@ -6,11 +6,13 @@ function Ranking() {
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/travel/ranked_travel_list/`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/travel/rankedlist/`, {
           params: {
             city: searchTerm,
             tag: searchTerm
@@ -24,7 +26,7 @@ function Ranking() {
 
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/travel/top_users/`);
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/travel/rankeduser/`);
         setUsers(response.data);
       } catch (error) {
         console.error('유저 데이터를 불러오는 데 실패했습니다', error);
@@ -33,10 +35,19 @@ function Ranking() {
 
     fetchPosts();
     fetchUsers();
-  }, [searchTerm]); // searchTerm이 변경될 때마다 fetchPosts를 호출하여 데이터를 업데이트합니다.
+  }, [searchTerm]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
+  };
+
+  const openModal = (post) => {
+    setSelectedPost(post);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -52,9 +63,9 @@ function Ranking() {
             onChange={handleSearch}
           />
           <ol>
-            {posts.map((post, index) => (
-              <li key={index}>
-                <span>{index + 1}.</span> {post.City} ({post.like_count} likes)
+            {posts.slice(0, 5).map((post, index) => (
+              <li key={index} onClick={() => openModal(post)} className="ranked-post-item">
+                <span>{index + 1}.</span> {post.Journal} {/* Display journal content instead of city */}
               </li>
             ))}
           </ol>
@@ -70,6 +81,26 @@ function Ranking() {
           </ol>
         </div>
       </div>
+      {isModalOpen && (
+        <div className="modal" onClick={closeModal}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <span className="close" onClick={closeModal}>&times;</span>
+            <div className="modal-header">
+              <h2>{selectedPost.City}</h2>
+            </div>
+            <div className="modal-body">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <li><strong>기간:</strong> {selectedPost.Date}</li>
+                </div>
+              </div>
+              <li><strong>예산:</strong> {new Intl.NumberFormat('ko-KR').format(selectedPost.Money)} 원</li>
+              <li><strong>태그:</strong> {selectedPost.Tag}</li>
+              <textarea className="madal-review-field" value={selectedPost.Journal} readOnly></textarea>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
