@@ -87,7 +87,7 @@ function Write() {
           <img src={note} alt='note' className="icon-large" />
           일지
         </div>
-        <input type="text" className="input-field input-post" placeholder="일지 내용" value={journal} onChange={handleJournalChange} />
+        <textarea type="text" className="input-field input-post" placeholder="일지 내용" value={journal} onChange={handleJournalChange} />
       </div>
       <button className="button" onClick={saveData}>저장</button>
     </div>
