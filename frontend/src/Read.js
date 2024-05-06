@@ -18,7 +18,7 @@ function Read() {
         const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/travel/`);
         setData(response.data);
       } catch (error) {
-        console.error('데이터를 불러오는 데 실패했습니다.', error);
+        console.error('Failed to fetch data.', error);
       }
     };
     fetchData();
@@ -35,28 +35,29 @@ function Read() {
   };
 
   const handleLike = async (travelId) => {
-    const username = localStorage.getItem('name'); // 로컬 스토리지에서 사용자 이름 가져오기
+    const username = localStorage.getItem('name');
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/travel/${travelId}/like/`, {
         name: username
       });
-      setLikeMessage(response.data.message);
-      // 좋아요 후의 데이터를 업데이트하여 리렌더링
-      const updatedData = data.map(item => {
-        if (item.TravelID === travelId) {
-          return { ...item, likes_count: item.likes_count + 1 };
-        }
-        return item;
-      });
-      setData(updatedData);
+      if (response.data && response.data.likes_count !== undefined) {
+        const updatedData = data.map(item =>
+          item.TravelID === travelId ? { ...item, likes_count: response.data.likes_count } : item
+        );
+        setData(updatedData);
+        ;
+      } else {
+        setLikeMessage('좋아요를 눌렀습니다!');
+      }
     } catch (error) {
       if (error.response) {
         setLikeMessage(error.response.data.message);
       } else {
-        setLikeMessage('좋아요를 처리할 수 없습니다.');
+        setLikeMessage('좋아요 처리 중 문제가 발생했습니다.');
       }
     }
   };
+
 
   return (
     <div className="read-container">
@@ -85,16 +86,29 @@ function Read() {
       ))}
       {isModalOpen && (
         <div className="modal" onClick={e => e.stopPropagation()}>
-          <div className="modal-content">
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
             <span className="close" onClick={closeModal}>&times;</span>
-            <p>{selectedJournal.Journal}</p>
-            <p>Posted by: {selectedJournal.name}</p>
-            <p>Likes: {selectedJournal.likes_count}</p>
-            <button onClick={() => handleLike(selectedJournal.TravelID)}>Like</button>
-            {likeMessage && <p>{likeMessage}</p>}
+            <div className="modal-header">
+              <h2 style={{ textAlign: 'center', fontSize: '24px', fontWeight: 'bold' }}>{selectedJournal.City}</h2>
+            </div>
+            <div className="modal-body">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <li><strong>기간:</strong> {selectedJournal.Date}</li>
+                </div>
+                <button className="like-button" onClick={() => handleLike(selectedJournal.TravelID)}>
+                </button>
+              </div>
+              <li><strong>예산:</strong> {new Intl.NumberFormat('ko-KR').format(selectedJournal.Money)} 원</li>
+              <li><strong>태그:</strong> {selectedJournal.Tag}</li>
+              <textarea className="madal-review-field" value={selectedJournal.Journal} readOnly></textarea>
+              {/* 메시지 표시 부분 추가 */}
+              {likeMessage && <div style={{ color: 'red', marginTop: '10px' }}>{likeMessage}</div>}
+            </div>
           </div>
         </div>
       )}
+
     </div>
   );
 }
